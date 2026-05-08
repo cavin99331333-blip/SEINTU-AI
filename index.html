@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="ko" class="theme-light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>세인투 성장조 10주 조 운영 방향</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- PNG Export -->
+  <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root,
+    html.theme-light {
+      --bg: #F7F3EE;
+      --surface: #FDFAF6;
+      --surface-2: #EDE8E1;
+      --text: #2B2520;
+      --text-2: #7A7069;
+      --text-3: #A89E94;
+      --accent: #6B4FA8;
+      --accent-soft: #E8DFF5;
+      --accent-2: #A07850;
+      --border: rgba(80,60,40,0.10);
+      --shadow: rgba(80,60,40,0.08);
+      --warm1: #D4C5B0;
+      --warm2: #C8B4A0;
+      --card-bg: #FDFAF6;
+      --positive: #4A7C59;
+      --negative: #C0544A;
+      --warning: #C8944A;
+    }
+
+    html.theme-dark {
+      --bg: #1A1510;
+      --surface: #221E18;
+      --surface-2: #2E2820;
+      --text: #EDE8E1;
+      --text-2: #A89E94;
+      --text-3: #7A7069;
+      --accent: #9B7FD4;
+      --accent-soft: #2D2040;
+      --accent-2: #D4A870;
+      --border: rgba(255,240,220,0.08);
+      --shadow: rgba(0,0,0,0.30);
+      --warm1: #4A4035;
+      --warm2: #3D3328;
+      --card-bg: #221E18;
+      --positive: #5FA870;
+      --negative: #E06050;
+      --warning: #D4A850;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Noto Sans KR', 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+    }
+
+    /* ===================== UTILITY MENU ===================== */
+    .menu-container {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 1000;
+    }
+    .menu-toggle {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      transition: background 0.15s, box-shadow 0.15s;
+    }
+    .menu-toggle:hover { background: var(--surface-2); box-shadow: 0 4px 12px var(--shadow); }
+    .menu-dropdown {
+      display: none;
+      position: absolute; top: 48px; right: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px;
+      min-width: 160px;
+      box-shadow: 0 8px 30px var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .menu-dropdown.open { display: block; }
+    .menu-btn {
+      display: flex; align-items: center; gap: 10px;
+      width: 100%; padding: 8px 12px;
+      border-radius: 6px; border: none;
+      background: transparent; color: var(--text);
+      font-family: inherit; font-size: 0.875rem;
+      cursor: pointer; text-align: left;
+      transition: background 0.1s;
+    }
+    .menu-btn:hover { background: var(--surface-2); }
+
+    /* ===================== SLIDER WRAPPER ===================== */
+    .slider-wrapper {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Card viewport — fixed 1080×1080 ratio in the center */
+    .card-viewport {
+      position: relative;
+      width: min(90vw, 90vh, 600px);
+      aspect-ratio: 1 / 1;
+    }
+
+    /* Individual slides */
+    .slide {
+      position: absolute;
+      inset: 0;
+      background: var(--card-bg);
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      box-shadow: 0 20px 60px var(--shadow);
+      display: flex;
+      flex-direction: column;
+      padding: 48px 44px 32px;
+      opacity: 0;
+      transform: translateX(80px) scale(0.97);
+      pointer-events: none;
+      transition: opacity 0.45s cubic-bezier(.4,0,.2,1),
+                  transform 0.45s cubic-bezier(.4,0,.2,1);
+      overflow: hidden;
+    }
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+      pointer-events: auto;
+    }
+    .slide.exit-left {
+      opacity: 0;
+      transform: translateX(-80px) scale(0.97);
+    }
+
+    /* -------- Decorative wave SVG on some slides -------- */
+    .slide-wave {
+      position: absolute;
+      bottom: -20px; right: -30px;
+      width: 60%;
+      opacity: 0.07;
+      pointer-events: none;
+    }
+
+    /* ===================== SLIDE HEADER ===================== */
+    .slide-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: auto;
+    }
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .brand-icon {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--accent), #9B60D8);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .brand-icon svg { width: 16px; height: 16px; color: white; }
+    .brand-name {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--text-2);
+      text-transform: uppercase;
+    }
+
+    /* ===================== SLIDE 1 — COVER ===================== */
+    #slide-1 {
+      background: linear-gradient(155deg, #FDFAF6 0%, #F0EBE2 50%, #EAE0D5 100%);
+      justify-content: space-between;
+    }
+    html.theme-dark #slide-1 {
+      background: linear-gradient(155deg, #221E18 0%, #2A241C 50%, #302820 100%);
+    }
+
+    .cover-tag {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 5px 12px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 28px;
+    }
+    .cover-title {
+      font-size: clamp(1.8rem, 4.5vw, 2.6rem);
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: -0.03em;
+      color: var(--text);
+    }
+    .cover-title .highlight {
+      color: var(--accent);
+    }
+    .cover-sub {
+      font-size: clamp(0.85rem, 1.8vw, 1rem);
+      color: var(--text-2);
+      line-height: 1.75;
+      margin-top: 20px;
+      font-weight: 300;
+    }
+    .cover-bottom {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+    .cover-meta {
+      font-size: 0.75rem;
+      color: var(--text-3);
+      font-weight: 400;
+      letter-spacing: 0.05em;
+    }
+    .swipe-hint {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+    .swipe-hint .arrow-icon {
+      animation: pulse-right 1.8s ease-in-out infinite;
+    }
+    @keyframes pulse-right {
+      0%, 100% { transform: translateX(0); opacity: 1; }
+      50% { transform: translateX(6px); opacity: 0.6; }
+    }
+
+    /* ===================== SLIDE 2 — 초보 ===================== */
+    .slide-page-num {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      color: var(--text-3);
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+    .slide-eyebrow {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .slide-main-quote {
+      font-size: clamp(1.4rem, 3.5vw, 2rem);
+      font-weight: 700;
+      line-height: 1.35;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 28px;
+    }
+    .slide-body {
+      font-size: clamp(0.85rem, 1.6vw, 0.95rem);
+      color: var(--text-2);
+      line-height: 1.85;
+      font-weight: 300;
+      flex: 1;
+    }
+    .slide-emphasis {
+      margin-top: 24px;
+      padding: 14px 18px;
+      background: var(--accent-soft);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--accent);
+      line-height: 1.6;
+    }
+
+    /* ===================== SLIDE 4 — 분위기 ===================== */
+    .keyword-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 20px 0 24px;
+    }
+    .keyword-chip {
+      padding: 10px 14px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-2);
+      text-align: center;
+    }
+
+    /* ===================== SLIDE 5 — 조장 ===================== */
+    .role-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin: 24px 0;
+      flex: 1;
+    }
+    .role-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.9rem;
+      color: var(--text-2);
+      line-height: 1.6;
+      font-weight: 300;
+    }
+    .role-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+      margin-top: 8px;
+    }
+
+    /* ===================== SLIDE 6 — 운영 방향 ===================== */
+    .timeline-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 20px 0;
+      flex: 1;
+    }
+    .timeline-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .timeline-marker {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .timeline-badge {
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 4px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .timeline-line {
+      width: 1px;
+      flex: 1;
+      min-height: 20px;
+      background: var(--border);
+      margin: 6px auto 0;
+    }
+    .timeline-content {
+      flex: 1;
+      padding-bottom: 12px;
+    }
+    .timeline-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .timeline-desc {
+      font-size: 0.8rem;
+      color: var(--text-2);
+      font-weight: 300;
+      line-height: 1.55;
+    }
+
+    /* ===================== SLIDE 7 — 마무리 ===================== */
+    #slide-7 {
+      background: linear-gradient(155deg, #F5F0FA 0%, #EDE4F8 50%, #F0EAF5 100%);
+      justify-content: space-between;
+    }
+    html.theme-dark #slide-7 {
+      background: linear-gradient(155deg, #221E2A 0%, #28202E 50%, #221E28 100%);
+    }
+    .final-title {
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: -0.025em;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+    .final-body {
+      font-size: 0.9rem;
+      color: var(--text-2);
+      line-height: 1.85;
+      font-weight: 300;
+      flex: 1;
+    }
+    .final-tag {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--accent);
+      padding: 12px 0;
+      border-top: 1px solid var(--border);
+      margin-top: 20px;
+    }
+    .final-footer {
+      font-size: 0.72rem;
+      color: var(--text-3);
+      letter-spacing: 0.08em;
+    }
+
+    /* ===================== PROGRESS BAR ===================== */
+    .progress-bar-wrap {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--border);
+      z-index: 100;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), #9B60D8);
+      border-radius: 0 3px 3px 0;
+      transition: width 0.4s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ===================== NAV ARROWS ===================== */
+    .nav-arrows {
+      position: fixed;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      z-index: 100;
+    }
+    .nav-btn {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 16px var(--shadow);
+      transition: all 0.18s ease;
+      font-size: 18px;
+    }
+    .nav-btn:hover:not(:disabled) {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+      transform: scale(1.08);
+    }
+    .nav-btn:disabled { opacity: 0.28; cursor: default; }
+    .page-counter {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-2);
+      letter-spacing: 0.08em;
+      min-width: 42px;
+      text-align: center;
+    }
+
+    /* ===================== ANIMATIONS ===================== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .slide.active .anim-1 { animation: fadeInUp 0.5s 0.05s ease both; }
+    .slide.active .anim-2 { animation: fadeInUp 0.5s 0.15s ease both; }
+    .slide.active .anim-3 { animation: fadeInUp 0.5s 0.25s ease both; }
+    .slide.active .anim-4 { animation: fadeInUp 0.5s 0.35s ease both; }
+    .slide.active .anim-5 { animation: fadeInUp 0.5s 0.45s ease both; }
+    .slide.active .anim-6 { animation: fadeInUp 0.5s 0.55s ease both; }
+
+    /* ===================== ACCESSIBILITY ===================== */
+    .skip-link {
+      position: absolute; top: -40px; left: 16px;
+      background: var(--accent); color: white;
+      padding: 8px 16px; border-radius: 4px;
+      text-decoration: none; z-index: 9999;
+    }
+    .skip-link:focus { top: 16px; }
+    *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* ===================== RESPONSIVE ===================== */
+    @media (max-width: 500px) {
+      .card-viewport { width: 95vw; }
+      .slide { padding: 32px 28px 24px; }
+      .nav-arrows { bottom: 24px; }
+    }
+
+    /* ===================== PRINT ===================== */
+    @media print {
+      .menu-container, .nav-arrows, .progress-bar-wrap { display: none !important; }
+      .slider-wrapper { height: auto; overflow: visible; }
+      .card-viewport { position: static; width: 100%; aspect-ratio: auto; }
+      .slide { position: static; opacity: 1; transform: none; pointer-events: auto; margin-bottom: 40px; page-break-inside: avoid; }
+    }
+
+    /* Divider line in body text */
+    .body-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 16px 0;
+    }
+
+    /* Large quote mark decoration */
+    .quote-mark {
+      font-size: 5rem;
+      line-height: 1;
+      color: var(--accent-soft);
+      font-family: Georgia, serif;
+      position: absolute;
+      top: 32px;
+      right: 36px;
+      pointer-events: none;
+    }
+    html.theme-dark .quote-mark {
+      color: var(--warm1);
+    }
+  </style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">본문으로 건너뛰기</a>
+
+<!-- Utility Menu -->
+<div class="menu-container">
+  <button class="menu-toggle" onclick="toggleMenu()" aria-label="옵션 메뉴">⋯</button>
+  <div class="menu-dropdown" id="menuDropdown">
+    <button class="menu-btn" onclick="cycleTheme()"><span>◐</span> 테마 전환</button>
+    <button class="menu-btn" onclick="downloadPNG()"><span>⤓</span> PNG 저장</button>
+    <button class="menu-btn" onclick="window.print()"><span>⎙</span> 인쇄 / PDF</button>
+  </div>
+</div>
+
+<!-- Progress Bar -->
+<div class="progress-bar-wrap" aria-hidden="true">
+  <div class="progress-fill" id="progressFill"></div>
+</div>
+
+<!-- Nav Arrows -->
+<nav class="nav-arrows" aria-label="슬라이드 탐색">
+  <button class="nav-btn" id="prevBtn" onclick="prevSlide()" aria-label="이전 슬라이드" disabled>←</button>
+  <span class="page-counter" id="pageCounter" aria-live="polite">1 / 7</span>
+  <button class="nav-btn" id="nextBtn" onclick="nextSlide()" aria-label="다음 슬라이드">→</button>
+</nav>
+
+<main id="main-content">
+  <div class="slider-wrapper">
+    <div class="card-viewport" id="cardViewport">
+
+      <!-- ============ SLIDE 1 : COVER ============ -->
+      <div class="slide active" id="slide-1" role="region" aria-label="슬라이드 1: 표지">
+
+        <!-- Decorative wave -->
+        <svg class="slide-wave" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M-50 150 Q50 80 150 150 Q250 220 350 150 Q450 80 550 150" stroke="#6B4FA8" stroke-width="2" fill="none"/>
+          <path d="M-50 200 Q50 130 150 200 Q250 270 350 200 Q450 130 550 200" stroke="#6B4FA8" stroke-width="1.5" fill="none"/>
+          <path d="M-50 250 Q50 180 150 250 Q250 320 350 250 Q450 180 550 250" stroke="#6B4FA8" stroke-width="1" fill="none"/>
+        </svg>
+
+        <!-- Brand -->
+        <div class="brand-logo anim-1">
+          <div class="brand-icon">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="8" cy="8" r="5" stroke="white" stroke-width="1.5"/>
+              <path d="M8 5v3l2 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="brand-name">SEINTU AI</span>
+        </div>
+
+        <!-- Main content -->
+        <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; margin: 24px 0;">
+          <div class="cover-tag anim-2">AI 성장조 · 조장 모임</div>
+          <h1 class="cover-title anim-3">
+            남기자의<br>
+            <span class="highlight">10주</span> 조 운영 방향
+          </h1>
+          <p class="cover-sub anim-4">
+            완벽하게 잘하는 것보다,<br>
+            끝까지 함께 가는 분위기를<br>
+            만들고 싶었습니다.
+          </p>
+        </div>
+
+        <!-- Bottom -->
+        <div class="cover-bottom anim-5">
+          <span class="cover-meta">AI 성장조 · 조장 모임</span>
+          <div class="swipe-hint">
+            SWIPE
+            <span class="arrow-icon">→</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ SLIDE 2 : 초보 경험 ============ -->
+      <div class="slide" id="slide-2" role="region" aria-label="슬라이드 2: 나의 경험">
+
+        <div class="brand-logo anim-1">
+          <div class="brand-icon">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="8" cy="8" r="5" stroke="white" stroke-width="1.5"/>
+              <path d="M8 5v3l2 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="brand-name">SEINTU AI</span>
+        </div>
+
+        <div style="position:absolute; top:36px; right:40px; font-size:0.68rem; color:var(--text-3); font-weight:500; letter-spacing:0.1em;">02 / 07</div>
+
+        <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 20px 0;">
+          <p class="slide-eyebrow anim-2">나의 경험</p>
+          <h2 class="slide-main-quote anim-3">
+            저도 처음엔<br>
+            정말 아무것도<br>
+            몰랐습니다.
+          </h2>
+          <div class="slide-body anim-4">
+            누군가에겐 쉬운 말이<br>
+            저에겐 너무 어렵게 느껴졌습니다.<br><br>
+            AI도,<br>
+            커뮤니티도,<br>
+            질문하는 것조차 낯설었습니다.
+          </div>
+        </div>
+
+        <div class="slide-emphasis anim-5">
+          처음엔 누구나 어색할 수 있습니다.
+        </div>
+
+        <!-- Decorative empty cursor symbol -->
+        <div style="position:absolute; bottom:90px; right:40px; font-size:1.8rem; opacity:0.08; pointer-events:none;" aria-hidden="true">▌</div>
+      </div>
+
+      <!-- ============ SLIDE 3 : 위축과 비교 ============ -->
+      <div class="slide" id="slide-3" role="region" aria-label="슬라이드 3: 위축과 비교의 경험">
+
+        <div class="brand-logo anim-1">
+          <div class="brand-icon">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="8" cy="8" r="5" stroke="white" stroke-width="1.5"/>
+              <path d="M8 5v3l2 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="brand-name">SEINTU AI</span>
+        </div>
+
+        <div style="position:absolute; top:36px; right:40px; font-size:0.68rem; color:var(--text-3); font-weight:500; letter-spacing:0.1em;">03 / 07</div>
+
+        <!-- Big decorative quote -->
+        <div class="quote-mark anim-1" aria-hidden="true">"</div>
+
+        <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 20px 0;">
+          <p class="slide-eyebrow anim-2">위축과 비교</p>
+          <h2 class="slide-main-quote anim-3">
+            잘하는 사람들을 보며<br>
+            점점 조용해졌던<br>
+            적이 있었습니다.
+          </h2>
+          <div class="slide-body anim-4" style="font-style:italic; color:var(--text-2);">
+            "나는 왜 이렇게 느릴까"
+          </div>
+          <div class="slide-body anim-5" style="margin-top:16px;">
+            질문 하나 남기는 것도 망설여졌고,<br>
+            혼자 뒤처지는 기분이 들 때도 있었습니다.
+          </div>
+        </div>
+
+        <div class="slide-emphasis anim-6">
+          실력보다 먼저,<br>마음이 멀어질 때가 있습니다.
+        </div>
+      </div>
+
+      <!-- ============ SLIDE 4 : 만들고 싶은 분위기 ============ -->
+      <div class="slide" id="slide-4" role="region" aria-label="슬라이드 4: 만들고 싶은 분위기">
+
+        <div class="brand-logo anim-1">
+          <div class="brand-icon">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="8" cy="8" r="5" stroke="white" stroke-width="1.5"/>
+              <path d="M8 5v3l2 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="brand-name">SEINTU AI</span>
+        </div>
+
+        <div style="position:absolute; top:36px; right:40px; font-size:0.68rem; color:var(--text-3); font-weight:500; letter-spacing:0.1em;">04 / 07</div>
+
+        <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 16px 0;">
+          <p class="slide-eyebrow anim-2">그래서 만들고 싶은 분위기</p>
+          <h2 class="slide-main-quote anim-3" style="font-size: clamp(1.1rem, 2.5vw, 1.5rem); line-height: 1.5;">
+            그래서 이번에는,<br>
+            누군가 혼자 조용히 멀어지지 않는<br>
+            분위기를 만들고 싶었습니다.
+          </h2>
+
+          <div class="keyword-grid anim-4">
+            <div class="keyword-chip">동행</div>
+            <div class="keyword-chip">안전한 분위기</div>
+            <div class="keyword-chip">부담 없음</div>
+            <div class="keyword-chip">다시 돌아오기</div>
+          </div>
+
+          <div class="slide-body anim-5">
+            잘하는 사람보다,<br>
+            <strong style="color:var(--text); font-weight:600;">끝까지 함께 가는 사람</strong>이 많아지는 흐름.<br><br>
+            늦어도, 천천히 와도,<br>
+            다시 들어올 수 있는 조.
+          </div>
+        </div>
+
+        <div class="slide-emphasis anim-6" style="font-size:1rem;">
+          완벽보다 완주 🙂
+        </div>
+      </div>
+
+      <!-- ============ SLIDE 5 : 조장의 역할 ============ -->
+      <div class="slide" id="slide-5" role="region" aria-label="슬라이드 5: 조장의 역할">
+
+        <div class="brand-logo anim-1">
+          <div class="brand-icon">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="8" cy="8" r="5" stroke="white" stroke-width="1.5"/>
+              <path d="M8 5v3l2 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="brand-name">SEINTU AI</span>
+        </div>
+
+        <div style="position:absolute; top:36px; right:40px; font-size:0.68rem; color:var(--text-3); font-weight:500; letter-spacing:0.1em;">05 / 07</div>
+
+        <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 16px 0;">
+          <p class="slide-eyebrow anim-2">조장의 역할</p>
+          <h2 class="slide-main-quote anim-3" style="font-size:clamp(1.1rem, 2.5vw, 1.5rem); line-height:1.5;">
+            조장은 끌고 가는 사람이 아니라,<br>
+            끝까지 리듬을 지켜주는<br>
+            사람이라고 생각했습니다.
+          </h2>
+
+          <ul class="role-list anim-4">
+            <li class="role-item">
+              <span class="role-dot"></span>
+              <span>가르치는 사람보다, 먼저 해보고 함께 나누는 사람.</span>
+            </li>
+            <li class="role-item">
+              <span class="role-dot"></span>
+              <span>압박보다, 다시 손 내밀 수 있는 사람.</span>
+            </li>
+            <li class="role-item">
+              <span class="role-dot"></span>
+              <span>혼자 앞서가기보다, 옆에서 같이 걸어가는 사람.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="slide-emphasis anim-5">
+          "같이 가요"<br>
+          <span style="font-size:0.82rem; font-weight:400;">그 말이 오래 남는 것 같습니다.</span>
+        </div>
+      </div>
+
+      <!-- ============ SLIDE 6 : 10주 운영 방향 ============ -->
+      <div class="slide" id="slide-6" role="region" aria-label="슬라이드 6: 10주 운영 방향">
+
+        <div class="brand-logo anim-1">
+          <div class="brand-icon">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="8" cy="8" r="5" stroke="white" stroke-width="1.5"/>
+              <path d="M8 5v3l2 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="brand-name">SEINTU AI</span>
+        </div>
+
+        <div style="position:absolute; top:36px; right:40px; font-size:0.68rem; color:var(--text-3); font-weight:500; letter-spacing:0.1em;">06 / 07</div>
+
+        <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 16px 0;">
+          <p class="slide-eyebrow anim-2">10주 운영 방향</p>
+          <h2 class="slide-main-quote anim-3" style="font-size:clamp(1.1rem,2.5vw,1.5rem);">
+            10주 동안<br>이런 흐름을 만들어가고 싶습니다.
+          </h2>
+
+          <div class="timeline-grid anim-4">
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <span class="timeline-badge">1–3주</span>
+                <div class="timeline-line"></div>
+              </div>
+              <div class="timeline-content">
+                <div class="timeline-title">적응과 연결</div>
+                <div class="timeline-desc">"질문해도 괜찮은 분위기"</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <span class="timeline-badge">4–7주</span>
+                <div class="timeline-line"></div>
+              </div>
+              <div class="timeline-content">
+                <div class="timeline-title">리듬 유지</div>
+                <div class="timeline-desc">"잘하는 것보다 끊기지 않기"</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <span class="timeline-badge">8–10주</span>
+              </div>
+              <div class="timeline-content">
+                <div class="timeline-title">완주와 응원</div>
+                <div class="timeline-desc">"여기까지 온 것 자체 인정하기"</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-emphasis anim-5">
+          작은 인증 하나도<br>의미 있게 바라보겠습니다.
+        </div>
+      </div>
+
+      <!-- ============ SLIDE 7 : 마무리 ============ -->
+      <div class="slide" id="slide-7" role="region" aria-label="슬라이드 7: 마무리">
+
+        <!-- Decorative wave -->
+        <svg class="slide-wave" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M-50 150 Q50 80 150 150 Q250 220 350 150 Q450 80 550 150" stroke="#6B4FA8" stroke-width="2" fill="none"/>
+          <path d="M-50 200 Q50 130 150 200 Q250 270 350 200 Q450 130 550 200" stroke="#6B4FA8" stroke-width="1.5" fill="none"/>
+        </svg>
+
+        <div class="brand-logo anim-1">
+          <div class="brand-icon">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="8" cy="8" r="5" stroke="white" stroke-width="1.5"/>
+              <path d="M8 5v3l2 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="brand-name">SEINTU AI</span>
+        </div>
+
+        <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; margin: 20px 0;">
+          <div class="cover-tag anim-2">마무리</div>
+          <h2 class="final-title anim-3">
+            우리 각자의 속도로,<br>
+            <span style="color:var(--accent);">10주</span> 같이 가면<br>
+            좋겠습니다.
+          </h2>
+          <p class="final-body anim-4">
+            누군가는 빠를 수도 있고,<br>
+            누군가는 천천히 갈 수도 있습니다.<br><br>
+            하지만 혼자 포기하지 않도록,<br>
+            같이 연결되어 가는 시간이 되었으면 합니다.
+          </p>
+          <div class="final-tag anim-5">
+            잘하는 것보다,<br>끝까지 함께 가는 것.
+          </div>
+        </div>
+
+        <div class="cover-bottom anim-6">
+          <span class="final-footer">AI 세인투 성장조 · 남기자</span>
+          <span style="font-size:0.78rem; color:var(--accent); font-weight:500; letter-spacing:0.08em;">SWIPE END 🙂</span>
+        </div>
+      </div>
+
+    </div><!-- /card-viewport -->
+  </div><!-- /slider-wrapper -->
+</main>
+
+<script>
+  // ===================== THEME =====================
+  var themes = ['light', 'dark'];
+  var currentTheme = 0;
+
+  function cycleTheme() {
+    currentTheme = (currentTheme + 1) % themes.length;
+    var theme = themes[currentTheme];
+    document.documentElement.className = 'theme-' + theme;
+    try { localStorage.setItem('seintu_theme', theme); } catch(e) {}
+  }
+
+  try {
+    var saved = localStorage.getItem('seintu_theme');
+    if (saved && themes.indexOf(saved) !== -1) {
+      currentTheme = themes.indexOf(saved);
+      document.documentElement.className = 'theme-' + saved;
+    }
+  } catch(e) {}
+
+  // ===================== MENU =====================
+  function toggleMenu() {
+    document.getElementById('menuDropdown').classList.toggle('open');
+  }
+  document.addEventListener('click', function(e) {
+    var container = document.querySelector('.menu-container');
+    if (container && !container.contains(e.target)) {
+      document.getElementById('menuDropdown').classList.remove('open');
+    }
+  });
+
+  // ===================== SLIDER =====================
+  var totalSlides = 7;
+  var current = 1;
+
+  function showSlide(n) {
+    // Remove states from current
+    var currentEl = document.getElementById('slide-' + current);
+    currentEl.classList.remove('active');
+    if (n > current) {
+      currentEl.classList.add('exit-left');
+    } else {
+      currentEl.style.transform = 'translateX(80px) scale(0.97)';
+      currentEl.style.opacity = '0';
+    }
+
+    current = n;
+    var nextEl = document.getElementById('slide-' + current);
+
+    // Reset all exit states
+    setTimeout(function() {
+      for (var i = 1; i <= totalSlides; i++) {
+        var el = document.getElementById('slide-' + i);
+        el.classList.remove('exit-left');
+        el.style.transform = '';
+        el.style.opacity = '';
+      }
+      nextEl.classList.add('active');
+    }, 10);
+
+    // Progress
+    var pct = (current / totalSlides) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+
+    // Counter
+    document.getElementById('pageCounter').textContent = current + ' / ' + totalSlides;
+
+    // Buttons
+    document.getElementById('prevBtn').disabled = (current === 1);
+    document.getElementById('nextBtn').disabled = (current === totalSlides);
+  }
+
+  function nextSlide() {
+    if (current < totalSlides) showSlide(current + 1);
+  }
+  function prevSlide() {
+    if (current > 1) showSlide(current - 1);
+  }
+
+  // Keyboard
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide();
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevSlide();
+    if (e.key === 'Escape') document.getElementById('menuDropdown').classList.remove('open');
+  });
+
+  // Touch / swipe
+  var touchStartX = 0;
+  var touchEndX = 0;
+  document.getElementById('cardViewport').addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+  document.getElementById('cardViewport').addEventListener('touchend', function(e) {
+    touchEndX = e.changedTouches[0].screenX;
+    var diff = touchStartX - touchEndX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) nextSlide();
+      else prevSlide();
+    }
+  }, { passive: true });
+
+  // Init progress
+  document.getElementById('progressFill').style.width = (1 / totalSlides * 100) + '%';
+
+  // ===================== PNG DOWNLOAD =====================
+  function downloadPNG() {
+    var menu = document.querySelector('.menu-container');
+    var nav = document.querySelector('.nav-arrows');
+    var prog = document.querySelector('.progress-bar-wrap');
+    menu.style.display = 'none';
+    nav.style.display = 'none';
+    prog.style.display = 'none';
+
+    var el = document.getElementById('cardViewport');
+    htmlToImage.toPng(el, { pixelRatio: 2 })
+      .then(function(dataUrl) {
+        var link = document.createElement('a');
+        link.download = 'seintu-card-news-slide-' + current + '.png';
+        link.href = dataUrl;
+        link.click();
+      })
+      .finally(function() {
+        menu.style.display = '';
+        nav.style.display = '';
+        prog.style.display = '';
+      });
+  }
+</script>
+
+</body>
+</html>
