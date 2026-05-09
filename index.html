@@ -93,7 +93,8 @@
       display: flex;
       flex-direction: column;
       gap: 5px;
-      padding: max(env(safe-area-inset-top,14px),14px) 22px 8px;
+      /* 우측 64px: 고정 메뉴버튼(38px) + 여백 확보 */
+      padding: max(env(safe-area-inset-top,14px),14px) 64px 8px 22px;
       position: relative; z-index: 2;
     }
     .top-row {
@@ -144,13 +145,15 @@
     .nav-overlay {
       position: fixed;
       bottom: max(env(safe-area-inset-bottom,12px),12px);
-      left: 0; right: 0;
+      left: 50%;
+      transform: translateX(-50%);
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 0 20px;
+      justify-content: center;
+      gap: 16px;
       z-index: 1000;
       pointer-events: none;
+      white-space: nowrap;
     }
     .nav-btn {
       pointer-events: all;
@@ -199,6 +202,7 @@
     /* ─── UTILITY MENU ─── */
     .menu-wrap {
       position: fixed; top: 14px; right: 14px; z-index: 2000;
+      display: flex; flex-direction: column; align-items: flex-end; gap: 6px;
     }
     .menu-tog {
       width: 38px; height: 38px; border-radius: 10px;
@@ -328,6 +332,40 @@
       50%{opacity:.95;transform:translateX(4px)}
     }
 
+    /* ─── CENTER VARIANT (pages 2–6) ─── */
+    .slide-mid.ctr {
+      text-align: center;
+      align-items: center;
+    }
+    .slide-mid.ctr .chip-row {
+      justify-content: center;
+    }
+    .slide-mid.ctr .divider {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .slide-mid.ctr .hl-box {
+      text-align: center;
+      max-width: 600px;
+      width: 100%;
+    }
+    .slide-mid.ctr .sub-p {
+      max-width: 560px;
+    }
+    .slide-mid.ctr .main-ttl {
+      max-width: 660px;
+    }
+    .slide-mid.ctr .timeline {
+      text-align: left;       /* 타임라인 내부는 좌정렬 유지 */
+      max-width: 480px;
+      width: 100%;
+    }
+    .slide-mid.ctr .deco-q {
+      text-align: left;
+      width: 100%;
+      max-width: 560px;
+    }
+
     /* ─── TIMELINE (page 6) ─── */
     .timeline { display:flex; flex-direction:column; gap:0; margin-bottom:0.7em; }
     .tl-row { display:flex; gap:0.85em; align-items:stretch; }
@@ -420,7 +458,6 @@
             </svg>
             <span class="logo-name">SEINTU AI</span>
           </div>
-          <span class="pg-badge">01 / 07</span>
         </div>
         <span class="slide-lbl a1">AI 성장조 · 조장 모임</span>
       </div>
@@ -467,12 +504,11 @@
             </svg>
             <span class="logo-name">SEINTU AI</span>
           </div>
-          <span class="pg-badge">02 / 07</span>
         </div>
         <span class="slide-lbl a1">나의 경험 · 초보였던 시간</span>
       </div>
 
-      <div class="slide-mid">
+      <div class="slide-mid ctr">
         <div class="chip-row a2">
           <span class="chip">#초보</span><span class="chip">#낯섦</span>
           <span class="chip">#어려움</span><span class="chip">#위축</span>
@@ -519,12 +555,11 @@
             </svg>
             <span class="logo-name">SEINTU AI</span>
           </div>
-          <span class="pg-badge">03 / 07</span>
         </div>
         <span class="slide-lbl a1">위축과 비교 · 카톡 벽타기</span>
       </div>
 
-      <div class="slide-mid">
+      <div class="slide-mid ctr">
         <div class="chip-row a2">
           <span class="chip">#비교</span><span class="chip">#조용해짐</span>
           <span class="chip">#위축</span><span class="chip">#속도차</span>
@@ -575,12 +610,11 @@
             </svg>
             <span class="logo-name">SEINTU AI</span>
           </div>
-          <span class="pg-badge">04 / 07</span>
         </div>
         <span class="slide-lbl a1">만들고 싶은 분위기는?</span>
       </div>
 
-      <div class="slide-mid">
+      <div class="slide-mid ctr">
         <div class="chip-row a2">
           <span class="chip">#동행</span><span class="chip">#질문이 편한 분위기</span>
           <span class="chip">#연결감</span><span class="chip">#언제든 다시</span>
@@ -622,12 +656,11 @@
             </svg>
             <span class="logo-name">SEINTU AI</span>
           </div>
-          <span class="pg-badge">05 / 07</span>
         </div>
         <span class="slide-lbl a1">조장의 역할은?</span>
       </div>
 
-      <div class="slide-mid">
+      <div class="slide-mid ctr">
         <div class="chip-row a2">
           <span class="chip">#리듬</span><span class="chip">#동행자</span>
           <span class="chip">#기버의 마음</span><span class="chip">#섬김이</span>
@@ -672,12 +705,11 @@
             </svg>
             <span class="logo-name">SEINTU AI</span>
           </div>
-          <span class="pg-badge">06 / 07</span>
         </div>
         <span class="slide-lbl a1">10주간 운영 방향</span>
       </div>
 
-      <div class="slide-mid">
+      <div class="slide-mid ctr">
         <div class="main-ttl a2" style="margin-bottom:.5em">
           10주 동안<br/>이런 흐름을<br/><span class="em">만들어가고 싶습니다.</span>
         </div>
@@ -740,7 +772,6 @@
             </svg>
             <span class="logo-name">SEINTU AI</span>
           </div>
-          <span class="pg-badge">07 / 07</span>
         </div>
         <span class="slide-lbl a1">세인투 AI 성장조 · 남기자</span>
       </div>
@@ -782,6 +813,8 @@
 <!-- ══════════════════ UTILITY MENU ══════════════════ -->
 <div class="menu-wrap">
   <button class="menu-tog" onclick="toggleMenu()">⋯</button>
+  <!-- 페이지 번호 — 메뉴 버튼 바로 아래 -->
+  <span class="pg-badge" id="fixedBadge" style="pointer-events:none;">01 / 07</span>
   <div class="menu-drop" id="mDrop">
     <button class="menu-btn" onclick="cycleTheme()"><span>◐</span> 테마 변경</button>
     <button class="menu-btn" onclick="dlPNG()"><span>⤓</span> PNG 저장</button>
@@ -826,6 +859,9 @@
     })(i);
   }
 
+  var fixedBadge = document.getElementById('fixedBadge');
+  function pad(n){ return n < 10 ? '0'+n : ''+n; }
+
   function goTo(n){
     if(busy||n===cur)return;
     busy=true;
@@ -837,6 +873,8 @@
     var dots=dotRow.querySelectorAll('.dot');
     dots.forEach(function(d,i){d.classList.toggle('on',i===cur);});
     pageCnt.textContent=(cur+1)+' / '+total;
+    // 고정 뱃지 업데이트
+    fixedBadge.textContent=pad(cur+1)+' / 07';
     prevBtn.disabled=cur===0;
     nextBtn.disabled=cur===total-1;
   }
